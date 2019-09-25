@@ -1,0 +1,229 @@
+{
+  "ViewOptions": {
+    "Days": [
+      {
+        "Name": "Monday",
+        "DayOfWeek": 1,
+        "IsDefault": true
+      },
+      {
+        "Name": "Tuesday",
+        "DayOfWeek": 2,
+        "IsDefault": true
+      },
+      {
+        "Name": "Wednesday",
+        "DayOfWeek": 3,
+        "IsDefault": true
+      },
+      {
+        "Name": "Thursday",
+        "DayOfWeek": 4,
+        "IsDefault": true
+      },
+      {
+        "Name": "Friday",
+        "DayOfWeek": 5,
+        "IsDefault": true
+      }
+    ],
+    "Weeks": [
+      {
+        "WeekNumber": 1,
+        "WeekLabel": "Week 1",
+        "FirstDayInWeek": "2019-09-23T00:00:00.000Z"
+      },
+      {
+        "WeekNumber": 2,
+        "WeekLabel": "Week 2",
+        "FirstDayInWeek": "2019-09-30T00:00:00.000Z"
+      },
+      {
+        "WeekNumber": 3,
+        "WeekLabel": "Week 3",
+        "FirstDayInWeek": "2019-10-07T00:00:00.000Z"
+      },
+      {
+        "WeekNumber": 4,
+        "WeekLabel": "Week 4",
+        "FirstDayInWeek": "2019-10-14T00:00:00.000Z"
+      },
+      {
+        "WeekNumber": 5,
+        "WeekLabel": "Week 5",
+        "FirstDayInWeek": "2019-10-21T00:00:00.000Z"
+      },
+      {
+        "WeekNumber": 6,
+        "WeekLabel": "Week 6",
+        "FirstDayInWeek": "2019-10-28T00:00:00.000Z"
+      },
+      {
+        "WeekNumber": 7,
+        "WeekLabel": "Week 7",
+        "FirstDayInWeek": "2019-11-04T00:00:00.000Z"
+      },
+      {
+        "WeekNumber": 8,
+        "WeekLabel": "Week 8",
+        "FirstDayInWeek": "2019-11-11T00:00:00.000Z"
+      },
+      {
+        "WeekNumber": 9,
+        "WeekLabel": "Week 9",
+        "FirstDayInWeek": "2019-11-18T00:00:00.000Z"
+      },
+      {
+        "WeekNumber": 10,
+        "WeekLabel": "Week 10",
+        "FirstDayInWeek": "2019-11-25T00:00:00.000Z"
+      },
+      {
+        "WeekNumber": 11,
+        "WeekLabel": "Week 11",
+        "FirstDayInWeek": "2019-12-02T00:00:00.000Z"
+      },
+      {
+        "WeekNumber": 12,
+        "WeekLabel": "Week 12",
+        "FirstDayInWeek": "2019-12-09T00:00:00.000Z"
+      },
+      {
+        "WeekNumber": 13,
+        "WeekLabel": "Week 13",
+        "FirstDayInWeek": "2019-12-16T00:00:00.000Z"
+      },
+      {
+        "WeekNumber": 19,
+        "WeekLabel": "Week 19",
+        "FirstDayInWeek": "2020-01-27T00:00:00.000Z"
+      },
+      {
+        "WeekNumber": 20,
+        "WeekLabel": "Week 20",
+        "FirstDayInWeek": "2020-02-03T00:00:00.000Z"
+      },
+      {
+        "WeekNumber": 21,
+        "WeekLabel": "Week 21",
+        "FirstDayInWeek": "2020-02-10T00:00:00.000Z"
+      },
+      {
+        "WeekNumber": 22,
+        "WeekLabel": "Week 22",
+        "FirstDayInWeek": "2020-02-17T00:00:00.000Z"
+      },
+      {
+        "WeekNumber": 23,
+        "WeekLabel": "Week 23",
+        "FirstDayInWeek": "2020-02-24T00:00:00.000Z"
+      },
+      {
+        "WeekNumber": 24,
+        "WeekLabel": "Week 24",
+        "FirstDayInWeek": "2020-03-02T00:00:00.000Z"
+      },
+      {
+        "WeekNumber": 25,
+        "WeekLabel": "Week 25",
+        "FirstDayInWeek": "2020-03-09T00:00:00.000Z"
+      },
+      {
+        "WeekNumber": 26,
+        "WeekLabel": "Week 26",
+        "FirstDayInWeek": "2020-03-16T00:00:00.000Z"
+      },
+      {
+        "WeekNumber": 27,
+        "WeekLabel": "Week 27",
+        "FirstDayInWeek": "2020-03-23T00:00:00.000Z"
+      },
+      {
+        "WeekNumber": 28,
+        "WeekLabel": "Week 28",
+        "FirstDayInWeek": "2020-03-30T00:00:00.000Z"
+      },
+      {
+        "WeekNumber": 29,
+        "WeekLabel": "Week 29",
+        "FirstDayInWeek": "2020-04-06T00:00:00.000Z"
+      },
+      {
+        "WeekNumber": 30,
+        "WeekLabel": "Week 30",
+        "FirstDayInWeek": "2020-04-13T00:00:00.000Z"
+      },
+      {
+        "WeekNumber": 31,
+        "WeekLabel": "Week 31",
+        "FirstDayInWeek": "2020-04-20T00:00:00.000Z"
+      }
+    ],
+    "TimePeriods": [
+      {
+        "Description": "All Day",
+        "StartTime": "08:00",
+        "EndTime": "22:00",
+        "IsDefault": true
+      }
+    ],
+    "DatePeriods": [
+      {
+        "Description": "All Year",
+        "StartDateTime": "2019-09-23T00:00:00.000Z",
+        "EndDateTime": "2020-11-06T00:00:00.000Z",
+        "IsDefault": false,
+        "IsThisWeek": false,
+        "IsNextWeek": false,
+        "Type": null
+      }
+    ],
+    "LegendItems": [],
+    "InstitutionConfig": {},
+    "DateConfig": {
+      "FirstDayInWeek": 1,
+      "StartDate": "2019-09-23T00:00:00+00:00",
+      "EndDate": "2020-09-29T00:00:00+00:00"
+    },
+    "AllDays": [
+      {
+        "Name": "Monday",
+        "DayOfWeek": 1,
+        "IsDefault": true
+      },
+      {
+        "Name": "Tuesday",
+        "DayOfWeek": 2,
+        "IsDefault": true
+      },
+      {
+        "Name": "Wednesday",
+        "DayOfWeek": 3,
+        "IsDefault": true
+      },
+      {
+        "Name": "Thursday",
+        "DayOfWeek": 4,
+        "IsDefault": true
+      },
+      {
+        "Name": "Friday",
+        "DayOfWeek": 5,
+        "IsDefault": true
+      },
+      {
+        "Name": "Saturday",
+        "DayOfWeek": 6,
+        "IsDefault": false
+      },
+      {
+        "Name": "Sunday",
+        "DayOfWeek": 0,
+        "IsDefault": false
+      }
+    ]
+  },
+  "CategoryIdentities": [
+    "38b55ac0-a242-23d3-4a10-79f11bdd780c"
+  ]
+}
