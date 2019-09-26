@@ -57,18 +57,18 @@ def PreEmbed(embed, events, day):
     if(events):
         for event in events:
             status_flag = ""
-            if(event.begin.to('local').format("HH:mm DD-MM-YYYY") in cancelled_events):
+            if(event.begin.to('Europe/Dublin').format("HH:mm DD-MM-YYYY") in cancelled_events):
                 status_flag = "~~"
-            msg += ("{}{} {} hours {} {}{}\n".format(status_flag, event.begin.to('local').format("HH:mm"), event.duration.seconds // 3600, event.location, event.name, status_flag))
+            msg += ("{}{} {} hours {} {}{}\n".format(status_flag, event.begin.to('Europe/Dublin').format("HH:mm"), event.duration.seconds // 3600, event.location, event.name, status_flag))
     if(not msg):
         msg = "No schedule found for {}.\n".format(day.format("ddd Do-MMM"))
     embed.add_field(name="{}.\n".format(day.format("ddd Do-MMM")), value=msg, inline=False)
 
 def GetDaySchedEmbed(day):
-    dow = - (int(arrow.utcnow().to('local').format("d")) - 1) + day
-    if(int(arrow.utcnow().to('local').format("d")) > 5):
+    dow = - (int(arrow.utcnow().to('Europe/Dublin').format("d")) - 1) + day
+    if(int(arrow.utcnow().to('Europe/Dublin').format("d")) > 5):
         dow += 7
-    day = arrow.utcnow().to('local').shift(days=+dow)
+    day = arrow.utcnow().to('Europe/Dublin').shift(days=+dow)
 
     embed = discord.Embed(title="Schedule for {}".format(day.format("ddd")), color=0x27ff22)
 
@@ -78,8 +78,8 @@ def GetDaySchedEmbed(day):
     return embed
 
 def GetWeekSchedEmbed(week_offset):
-    dow = int(arrow.utcnow().to('local').format("d")) - 1
-    start_week = arrow.utcnow().to('local').shift(days =- dow).shift(weeks = week_offset)
+    dow = int(arrow.utcnow().to('Europe/Dublin').format("d")) - 1
+    start_week = arrow.utcnow().to('Europe/Dublin').shift(days =- dow).shift(weeks = week_offset)
     end_week = start_week.shift(days=+4)
     embed = discord.Embed(title="{} Until {}".format(start_week.format("ddd Do-MMM"), end_week.format("ddd Do-MMM-YYYY")), color=0x27ff22)
     for day in arrow.Arrow.range('day', start_week, end_week):
@@ -129,11 +129,11 @@ async def on_message(message):
         await message.channel.send(embed = embed)
 
     if cmd.startswith('!today'):
-        embed = GetDaySchedEmbed(int(arrow.utcnow().to('local').format("d")) - 1)
+        embed = GetDaySchedEmbed(int(arrow.utcnow().to('Europe/Dublin').format("d")) - 1)
         await message.channel.send(embed = embed)
 
     if cmd.startswith('!tomorrow'):
-        embed = GetDaySchedEmbed(int(arrow.utcnow().to('local').format("d")))
+        embed = GetDaySchedEmbed(int(arrow.utcnow().to('Europe/Dublin').format("d")))
         await message.channel.send(embed = embed)
 
     if cmd.startswith('!this week'):
