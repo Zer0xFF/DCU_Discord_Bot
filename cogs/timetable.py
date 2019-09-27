@@ -211,7 +211,6 @@ class Timetable(commands.Cog):
         if len(args) > 2:
             await ctx.send("Expecting 2 arguments, date and time.\nE.g `!cancel 9:00 25-09-19`")
         cmd = " ".join(args)
-        print(cmd)
         m = re.search(r"(\d+:\d+) (\d+\-\d+\-\d+)", cmd)
         if m:
             embed = self.CancelEvent(cmd)
