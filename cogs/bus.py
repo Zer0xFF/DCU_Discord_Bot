@@ -19,7 +19,7 @@ class Bus(commands.Cog):
 
     @commands.dm_only()
     @commands.command(aliases=["bus", "stop"])
-    async def realtime(self, ctx, stopnumber):
+    async def realtime(self, ctx, stopnumber: int):
         """Bus RealTime Info"""
         data = await self.get(
             f"https://data.smartdublin.ie/cgi-bin/rtpi/realtimebusinformation?stopid={stopnumber}&format=json"
