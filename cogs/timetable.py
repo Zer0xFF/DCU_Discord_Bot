@@ -150,6 +150,7 @@ class Timetable(commands.Cog):
         if message.content.startswith("!power"):
             await message.channel.send("No, try `!POWER`")
 
+    @commands.has_any_role("OVERLORDS", "Mahmood")
     @commands.command()
     async def reload(self, ctx):
         """Reload the calender."""
@@ -158,6 +159,7 @@ class Timetable(commands.Cog):
         else:
             await ctx.send("Calender failed to reloaded")
 
+    @commands.is_owner()
     @commands.command()
     async def shutdown(self, ctx):
         """Shutdown the bot"""
@@ -205,6 +207,7 @@ class Timetable(commands.Cog):
         embed = self.GetDaySchedEmbed(int(arrow.utcnow().to("Europe/Dublin").format("d")))
         await ctx.send(embed=embed)
 
+    @commands.has_any_role("OVERLORDS", "Mahmood")
     @commands.command(usage="<time> <date>")
     async def cancel(self, ctx, *, args):
         """Cancel a lecture."""
