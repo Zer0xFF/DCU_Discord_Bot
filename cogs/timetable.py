@@ -1,6 +1,7 @@
 import json
 import os
 import re
+import datetime
 
 import arrow
 import discord
@@ -207,6 +208,7 @@ class Timetable(commands.Cog):
 
     @commands.command(usage="<time> <date>")
     async def cancel(self, ctx, *, args):
+        """Cancel a lecture."""
         args = args.split()
         if len(args) > 2:
             await ctx.send("Expecting 2 arguments, date and time.\nE.g `!cancel 9:00 25-09-19`")
@@ -217,6 +219,15 @@ class Timetable(commands.Cog):
             await ctx.send(embed=embed)
         else:
             await ctx.send("Invalid time date format, please use HH:mm DD-MM-YYYY")
+
+    @commands.command()
+    async def next(self, ctx):
+        """Next lecture."""
+        events = c.timeline.start_after(arrow.utcnow().to("Europe/Dublin"))
+        event = next(events)
+        embed = discord.Embed(title="Next Class", color=0x27FF22)
+        self.PreEmbed(embed, [event], event.begin)
+        await ctx.send(embed=embed)
 
 
 def setup(bot):
