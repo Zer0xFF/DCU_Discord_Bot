@@ -31,7 +31,7 @@ class Events(commands.Cog):
             error = f"```py\n{_traceback}{type(error).__name__}: {error}\n```"
 
             await ctx.send(
-                f"There was an error processing your command.\n Please check your console for more information."
+                f"There was an error processing your command.\nPlease check your console for more information."
             )
             print(error)
 

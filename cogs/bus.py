@@ -26,7 +26,7 @@ class Bus(commands.Cog):
         times = []
         if not data["errormessage"]:
             for bus in data["results"]:
-                times.append(f"{bus['route']} - Due in: {bus['duetime']} minute(s).")
+                times.append(f"Route: **{bus['route']}** - Due in: {bus['duetime']} minute(s).")
             embed = discord.Embed(
                 colour=ctx.author.colour,
                 title=f"Information for stop no {stopnumber}",
