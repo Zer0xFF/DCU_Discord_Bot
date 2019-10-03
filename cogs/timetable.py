@@ -1,7 +1,6 @@
 import json
 import os
 import re
-import datetime
 
 import arrow
 import discord
