@@ -17,6 +17,7 @@ class Bus(commands.Cog):
         async with self.session.get(url) as response:
             return await response.json()
 
+    @commands.dm_only()
     @commands.command(aliases=["bus", "stop"])
     async def realtime(self, ctx, stopnumber):
         """Bus RealTime Info"""
