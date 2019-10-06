@@ -140,10 +140,6 @@ class Timetable(commands.Cog):
             embed = self.GetWeekSchedEmbed(0)
             await message.channel.send(embed=embed)
 
-        if cmd.startswith("!next week"):
-            embed = self.GetWeekSchedEmbed(1)
-            await message.channel.send(embed=embed)
-
         if message.content.startswith("!POWER"):
             await message.channel.send("Can you feel the POWER!?!?!?")
 
@@ -222,13 +218,20 @@ class Timetable(commands.Cog):
         else:
             await ctx.send("Invalid time date format, please use HH:mm DD-MM-YYYY")
 
-    @commands.command()
+    @commands.group()
     async def next(self, ctx):
-        """Next lecture."""
-        events = c.timeline.start_after(arrow.utcnow().to("Europe/Dublin"))
-        event = next(events)
-        embed = discord.Embed(title="Next Class", color=0x27FF22)
-        self.PreEmbed(embed, [event], event.begin)
+        """Next class or next weeks classes."""
+        if ctx.invoked_subcommand is None:
+            events = c.timeline.start_after(arrow.utcnow().to("Europe/Dublin"))
+            event = next(events)
+            embed = discord.Embed(title="Next Class", color=0x27FF22)
+            self.PreEmbed(embed, [event], event.begin)
+            await ctx.send(embed=embed)
+
+    @next.command()
+    async def week(self, ctx):
+        """Next weeks classes."""
+        embed = self.GetWeekSchedEmbed(1)
         await ctx.send(embed=embed)
 
 
