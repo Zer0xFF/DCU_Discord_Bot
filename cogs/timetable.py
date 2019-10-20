@@ -81,18 +81,24 @@ class Timetable(commands.Cog):
             msg = "No schedule found for {}.\n".format(day.format("ddd Do-MMM"))
         embed.add_field(name="{}.\n".format(day.format("ddd Do-MMM")), value=msg, inline=False)
 
-    def GetDaySchedEmbed(self, day):
+    def GetDayOffset(self, day):
         dow = -(int(arrow.utcnow().to("Europe/Dublin").format("d")) - 1) + day
         if int(arrow.utcnow().to("Europe/Dublin").format("d")) > 5:
             dow += 7
-        day = arrow.utcnow().to("Europe/Dublin").shift(days=+dow)
+        day_arw = arrow.utcnow().to("Europe/Dublin").shift(days=+dow)
+        return day_arw
 
-        embed = discord.Embed(title="Schedule for {}".format(day.format("ddd")), color=0x27FF22)
+    def GetDayArwSchedEmbed(self, day_arw):
+        embed = discord.Embed(title="Schedule for {}".format(day_arw.format("ddd")), color=0x27FF22)
 
-        events = c.timeline.on(day)
-        self.PreEmbed(embed, events, day)
+        events = c.timeline.on(day_arw)
+        self.PreEmbed(embed, events, day_arw)
 
         return embed
+
+    def GetDaySchedEmbed(self, day):
+        day_arw = self.GetDayOffset(day)
+        return self.GetDayArwSchedEmbed(day_arw)
 
     def GetWeekSchedEmbed(self, week_offset):
         dow = int(arrow.utcnow().to("Europe/Dublin").format("d")) - 1
@@ -194,13 +200,15 @@ class Timetable(commands.Cog):
     @commands.command()
     async def today(self, ctx):
         """Classes for today."""
-        embed = self.GetDaySchedEmbed(int(arrow.utcnow().to("Europe/Dublin").format("d")) - 1)
+        day_arw = arrow.utcnow().to("Europe/Dublin")
+        embed = self.GetDayArwSchedEmbed(day_arw)
         await ctx.send(embed=embed)
 
     @commands.command()
     async def tomorrow(self, ctx):
         """Classes for tomorrow."""
-        embed = self.GetDaySchedEmbed(int(arrow.utcnow().to("Europe/Dublin").format("d")))
+        day_arw = arrow.utcnow().to("Europe/Dublin").shift(days=+1)
+        embed = self.GetDayArwSchedEmbed(day_arw)
         await ctx.send(embed=embed)
 
     @commands.has_any_role("OVERLORDS", "Mahmood")
