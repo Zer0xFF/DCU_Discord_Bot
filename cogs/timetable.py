@@ -125,10 +125,28 @@ class Timetable(commands.Cog):
         if events:
             cancelled_events.add(timedate)
             self.UpdateCancelFile()
-            self.PreEmbed(embed, events, day)
+            self.PreEmbed(embed, list(events)[0:1], day)
         else:
             embed.add_field(
                 name="Cancellation Failed.",
+                value="No event found on {}.\n".format(day.format("HH:mm ddd Do-MMM")),
+                inline=False,
+            )
+        return embed
+
+    def UncancelEvent(self, timedate):
+        day = arrow.get(timedate, "HH:mm DD-MM-YYYY", tzinfo="Europe/Dublin")
+        events = c.timeline.at(day)
+        embed = discord.Embed(
+            title="Uncancelling event - {}".format(day.format("ddd Do-MMM")), color=0x27FF22
+        )
+        if events and timedate in cancelled_events:
+            cancelled_events.remove(timedate)
+            self.UpdateCancelFile()
+            self.PreEmbed(embed, list(events)[0:1], day)
+        else:
+            embed.add_field(
+                name="Uncancellation Failed.",
                 value="No event found on {}.\n".format(day.format("HH:mm ddd Do-MMM")),
                 inline=False,
             )
@@ -222,6 +240,22 @@ class Timetable(commands.Cog):
         m = re.search(r"(\d+:\d+) (\d+\-\d+\-\d+)", cmd)
         if m:
             embed = self.CancelEvent(cmd)
+            await ctx.send(embed=embed)
+        else:
+            await ctx.send("Invalid time date format, please use HH:mm DD-MM-YYYY")
+
+
+    @commands.has_any_role("OVERLORDS", "Mahmood")
+    @commands.command(usage="<time> <date>")
+    async def uncancel(self, ctx, *, args):
+        """Uncancel a lecture."""
+        args = args.split()
+        if len(args) > 2:
+            await ctx.send("Expecting 2 arguments, date and time.\nE.g `!cancel 9:00 25-09-19`")
+        cmd = " ".join(args)
+        m = re.search(r"(\d+:\d+) (\d+\-\d+\-\d+)", cmd)
+        if m:
+            embed = self.UncancelEvent(cmd)
             await ctx.send(embed=embed)
         else:
             await ctx.send("Invalid time date format, please use HH:mm DD-MM-YYYY")
