@@ -119,13 +119,17 @@ class Timetable(commands.Cog):
     def CancelEvent(self, timedate):
         day = arrow.get(timedate, "HH:mm DD-MM-YYYY", tzinfo="Europe/Dublin")
         events = c.timeline.at(day)
+        for event in events:
+            if(event.begin == day):
+                events = [event]
+                break
         embed = discord.Embed(
             title="Cancelling event - {}".format(day.format("ddd Do-MMM")), color=0x27FF22
         )
         if events:
             cancelled_events.add(timedate)
             self.UpdateCancelFile()
-            self.PreEmbed(embed, list(events)[0:1], day)
+            self.PreEmbed(embed, events, day)
         else:
             embed.add_field(
                 name="Cancellation Failed.",
@@ -137,13 +141,17 @@ class Timetable(commands.Cog):
     def UncancelEvent(self, timedate):
         day = arrow.get(timedate, "HH:mm DD-MM-YYYY", tzinfo="Europe/Dublin")
         events = c.timeline.at(day)
+        for event in events:
+            if(event.begin == day):
+                events = [event]
+                break
         embed = discord.Embed(
             title="Uncancelling event - {}".format(day.format("ddd Do-MMM")), color=0x27FF22
         )
         if events and timedate in cancelled_events:
             cancelled_events.remove(timedate)
             self.UpdateCancelFile()
-            self.PreEmbed(embed, list(events)[0:1], day)
+            self.PreEmbed(embed, events, day)
         else:
             embed.add_field(
                 name="Uncancellation Failed.",
