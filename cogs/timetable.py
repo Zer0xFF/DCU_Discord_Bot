@@ -193,31 +193,31 @@ class Timetable(commands.Cog):
         """Shutdown the bot"""
         await self.bot.logout()
 
-    @commands.command(aliaes=["monday"])
+    @commands.command(aliases=["monday"])
     async def mon(self, ctx):
         """Classes for the following Monday"""
         embed = self.GetDaySchedEmbed(0)
         await ctx.send(embed=embed)
 
-    @commands.command(aliaes=["tuesday"])
+    @commands.command(aliases=["tuesday"])
     async def tue(self, ctx):
         """Classes for the following Tuesday"""
         embed = self.GetDaySchedEmbed(1)
         await ctx.send(embed=embed)
 
-    @commands.command(aliaes=["wednesday"])
+    @commands.command(aliases=["wednesday"])
     async def wed(self, ctx):
         """Classes for the following Wednesday."""
         embed = self.GetDaySchedEmbed(2)
         await ctx.send(embed=embed)
 
-    @commands.command(aliaes=["thursday"])
+    @commands.command(aliases=["thursday"])
     async def thurs(self, ctx):
         """Classes for the following Thursday."""
         embed = self.GetDaySchedEmbed(3)
         await ctx.send(embed=embed)
 
-    @commands.command(aliaes=["friday"])
+    @commands.command(aliases=["friday"])
     async def fri(self, ctx):
         """Classes for the following Friday."""
         embed = self.GetDaySchedEmbed(4)
