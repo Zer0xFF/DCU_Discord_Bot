@@ -206,7 +206,7 @@ class Timetable(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command(aliaes=["wednesday"])
-    async def wednesday(self, ctx):
+    async def wed(self, ctx):
         """Classes for the following Wednesday."""
         embed = self.GetDaySchedEmbed(2)
         await ctx.send(embed=embed)
