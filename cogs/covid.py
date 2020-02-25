@@ -3,7 +3,6 @@ from aiohttp import web
 import discord
 from discord.ext import commands
 import urllib
-import requests
 from bs4 import BeautifulSoup
 
 class Covid(commands.Cog):
@@ -25,7 +24,6 @@ class Covid(commands.Cog):
         """COVID-19 RealTime Info"""
         res = await self.get(
                 "https://www.worldometers.info/coronavirus/")
-        #soup = BeautifulSoup(res.content,'html.parser')
         soup = BeautifulSoup(res,'html.parser')
         rows = soup.find("div", {"class":"maincounter-number"}).find("span").text
         embed = discord.Embed(
