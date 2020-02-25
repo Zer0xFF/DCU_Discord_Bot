@@ -1,7 +1,10 @@
 import aiohttp
+from aiohttp import web
 import discord
 from discord.ext import commands
 import urllib
+import requests
+from bs4 import BeautifulSoup
 
 class Covid(commands.Cog):
     """Live infected numbers for COVID-19"""
@@ -14,16 +17,16 @@ class Covid(commands.Cog):
         self.bot.loop.create_task(self.session.detach())
 
     async def get(self, url):
-        async with requests.get(url) as response:
-            return await response
+        async with self.session.get(url) as response:
+            return await response.text()
 
-    @commands.dm_only()
-    @commands.command(aliases=["covid-19", "coronavirus"])
-    async def realtime(self):
+    @commands.command(aliases=["covid-19", "coronavirus", "covid", "corona"])
+    async def get_covid(self, ctx):
         """COVID-19 RealTime Info"""
         res = await self.get(
                 "https://www.worldometers.info/coronavirus/")
-        soup = BeautifulSoup(res.content,'html.parser')
+        #soup = BeautifulSoup(res.content,'html.parser')
+        soup = BeautifulSoup(res,'html.parser')
         rows = soup.find("div", {"class":"maincounter-number"}).find("span").text
         embed = discord.Embed(
                 colour=ctx.author.colour,
@@ -31,8 +34,6 @@ class Covid(commands.Cog):
                 description=rows
             )
         await ctx.send(embed=embed)
-        else:
-            ctx.send("errormessage")
 
 def setup(bot):
-    bot.add_cog(covid(bot))
+    bot.add_cog(Covid(bot))
