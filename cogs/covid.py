@@ -32,6 +32,7 @@ class Covid(commands.Cog):
                 description=rows
             )
         await ctx.send(embed=embed)
+        await ctx.send("https://www.youtube.com/watch?v=cphNpqKpKc4")
 
 def setup(bot):
     bot.add_cog(Covid(bot))
