@@ -41,19 +41,21 @@ class AI_Dungeon(commands.Cog):
 
     @commands.has_any_role("OVERLORDS", "Mahmood")
     @commands.command()
-    async def start_game(self, ctx, setting_id, character_id, character_name):
+    async def start_game(self, ctx, setting_id, character_id, character_name="Zer0xFF"):
         """Ai Dungeon"""
         self.send = ctx.send
 
         self.pending_input.append(setting_id)
         self.pending_input.append(character_id)
-        self.pending_input.append(character_name)
+        if(setting_id == "5"):
+            self.pending_input.append(character_name)
 
         # Loads the current session configuration
         self.session.choose_config()
         # Initializes the story
         self.session.init_story()
         await self.discord_print_msg()
+        self.pending_input.clear()
 
     @commands.Cog.listener()
     async def on_message(self, message):
@@ -63,7 +65,7 @@ class AI_Dungeon(commands.Cog):
                 isinstance(message.channel, discord.DMChannel)
                 or message.channel.permissions_for(message.guild.me).send_messages
             )
-            or message.content[0] == '!'
+            or not message.content or message.content[0] == '!'
         ):
             return
 
