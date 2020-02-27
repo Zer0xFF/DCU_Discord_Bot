@@ -29,22 +29,17 @@ class AI_Dungeon(commands.Cog):
     def cog_unload(self):
         pass
 
-    async def discord_print_msg(self):
+    def discord_get_msg(self):
         if(len(self.pending_msg) > 0):
-            await self.pending_msg.pop()
+            return self.pending_msg.popleft()
 
     def discord_queue_msg(self, txt):
-        if(self.send):
-            self.pending_msg.append(self.send("```{}```".format(txt)))
-        else:
-            print(txt)
+        self.pending_msg.append("```{}```".format(txt))
 
     @commands.has_any_role("OVERLORDS", "Mahmood")
     @commands.command()
     async def start_game(self, ctx, setting_id, character_id, character_name="Zer0xFF"):
         """Ai Dungeon"""
-        self.send = ctx.send
-
         self.pending_input.append(setting_id)
         self.pending_input.append(character_id)
         if(setting_id == "5"):
@@ -54,7 +49,9 @@ class AI_Dungeon(commands.Cog):
         self.session.choose_config()
         # Initializes the story
         self.session.init_story()
-        await self.discord_print_msg()
+        while(len(self.pending_msg) > 0):
+            await ctx.send(self.discord_get_msg())
+
         self.pending_input.clear()
 
     @commands.Cog.listener()
@@ -70,11 +67,11 @@ class AI_Dungeon(commands.Cog):
             return
 
         if(message.channel.name == "ai_dungeon2"):
-            self.send = message.channel.send
             self.pending_input.append(message.content)
 
             self.session.process_next_action()
-            await self.discord_print_msg()
+            while(len(self.pending_msg) > 0):
+                await message.channel.send(self.discord_get_msg())
 
 def setup(bot):
     bot.add_cog(AI_Dungeon(bot))
