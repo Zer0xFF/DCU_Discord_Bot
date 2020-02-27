@@ -51,7 +51,7 @@ class AI_Dungeon(commands.Cog):
         self.session.init_story()
         while(len(self.pending_msg) > 0):
             msg = self.discord_get_msg()
-            if(msg)
+            if(msg):
                 await ctx.send(msg)
 
         self.pending_input.clear()
@@ -74,7 +74,7 @@ class AI_Dungeon(commands.Cog):
             self.session.process_next_action()
             while(len(self.pending_msg) > 0):
                 msg = self.discord_get_msg()
-                if(msg)
+                if(msg):
                     await message.channel.send(msg)
 
 def setup(bot):
