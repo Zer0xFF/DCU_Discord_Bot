@@ -42,7 +42,7 @@ class AI_Dungeon(commands.Cog):
         """Ai Dungeon"""
         self.pending_input.append(setting_id)
         self.pending_input.append(character_id)
-        if(setting_id == "5"):
+        if(setting_id != "5"):
             self.pending_input.append(character_name)
 
         # Loads the current session configuration
