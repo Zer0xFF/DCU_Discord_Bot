@@ -83,5 +83,23 @@ class AI_Dungeon(commands.Cog):
             if(self.connections == 0 and len(self.pending_input) > 0):
                 self.pending_input.clear()
 
+    @commands.has_any_role("OVERLORDS", "Mahmood")
+    @commands.command()
+    async def debug_game(self, ctx):
+        await ctx.send("```Session:{}\nIteration:{}\nConnections:{}\nPending Input:{}\nPending Msg:{}```".format(self.session.session_id, self.session.prompt_iteration, self.connections, len(self.pending_input), len(self.pending_msg)))
+        if(self.pending_input):
+            await ctx.send("```{}```".format(self.pending_input))
+        if(self.pending_msg):
+            await ctx.send("```{}```".format(self.pending_msg))
+
+    @commands.has_any_role("OVERLORDS", "Mahmood")
+    @commands.command()
+    async def clear_pending_game(self, ctx, what):
+        if(what == "input"):
+            self.pending_input.clear()
+        if(what == "msg"):
+            self.pending_msg.clear()
+
+
 def setup(bot):
     bot.add_cog(AI_Dungeon(bot))
