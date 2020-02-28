@@ -6,7 +6,7 @@ import aiohttp
 import discord
 from discord.ext import commands
 import collections
-
+import time
 
 class AI_Dungeon(commands.Cog):
     """I_Dungeon"""
@@ -17,6 +17,8 @@ class AI_Dungeon(commands.Cog):
         self.session = ai_dungeon_cli.AiDungeon()
         ai_dungeon_cli.set_input(lambda *args : self.pending_input.popleft())
         ai_dungeon_cli.set_print(lambda txt : self.discord_queue_msg(txt))
+
+        self.connections = 0
 
         # Login if necessary
         if not self.session.get_auth_token():
@@ -69,6 +71,7 @@ class AI_Dungeon(commands.Cog):
             return
 
         if(message.channel.name == "ai_dungeon2"):
+            self.connections += 1
             self.pending_input.append(message.content)
 
             self.session.process_next_action()
@@ -76,6 +79,9 @@ class AI_Dungeon(commands.Cog):
                 msg = self.discord_get_msg()
                 if(msg):
                     await message.channel.send(msg)
+            self.connections -= 1
+            if(self.connections == 0 and len(self.pending_input) > 0):
+                self.pending_input.clear()
 
 def setup(bot):
     bot.add_cog(AI_Dungeon(bot))
