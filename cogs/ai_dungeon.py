@@ -66,11 +66,23 @@ class AI_Dungeon(commands.Cog):
                 isinstance(message.channel, discord.DMChannel)
                 or message.channel.permissions_for(message.guild.me).send_messages
             )
-            or not message.content or message.content[0] == '!'
+            or not message.content
         ):
             return
 
+        if(message.content[0] == '!'):
+            if(len(message.content) > 2):
+                if(message.content[1] == '!'):
+                    message.content = message.content[1:].strip()
+                else:
+                    return
+            else:
+                return
+
         if(message.channel.name == "ai_dungeon2"):
+            if(self.session.session_id == None):
+                await message.channel.send("```{}```".format("No game is currently running, please start one 1st."))
+                return
             self.connections += 1
             self.pending_input.append(message.content)
 
