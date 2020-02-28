@@ -112,6 +112,14 @@ class AI_Dungeon(commands.Cog):
         if(what == "msg"):
             self.pending_msg.clear()
 
+    @commands.has_any_role("OVERLORDS", "Mahmood")
+    @commands.command()
+    async def resume_game(self, ctx, id: int):
+        self.session.resume_story(id)
+        while(len(self.pending_msg) > 0):
+            msg = self.discord_get_msg()
+            if(msg):
+                await ctx.send(msg)
 
 def setup(bot):
     bot.add_cog(AI_Dungeon(bot))
