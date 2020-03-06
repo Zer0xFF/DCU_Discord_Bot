@@ -15,8 +15,8 @@ class AI_Dungeon(commands.Cog):
         self.pending_msg = collections.deque()
         self.pending_input = collections.deque()
         self.session = ai_dungeon_cli.AiDungeon()
-        ai_dungeon_cli.set_input(lambda *args : self.pending_input.popleft())
-        ai_dungeon_cli.set_print(lambda txt : self.discord_queue_msg(txt))
+        ai_dungeon_cli.set_input_handler(lambda *args : self.pending_input.popleft())
+        ai_dungeon_cli.set_print_handler(self.discord_queue_msg)
 
         self.connections = 0
 
@@ -114,7 +114,7 @@ class AI_Dungeon(commands.Cog):
 
     @commands.has_any_role("OVERLORDS", "Mahmood")
     @commands.command()
-    async def resume_game(self, ctx, id: int):
+    async def resume_game(self, ctx, id: str):
         self.session.resume_story(id)
         while(len(self.pending_msg) > 0):
             msg = self.discord_get_msg()
