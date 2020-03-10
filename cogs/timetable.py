@@ -81,18 +81,24 @@ class Timetable(commands.Cog):
             msg = "No schedule found for {}.\n".format(day.format("ddd Do-MMM"))
         embed.add_field(name="{}.\n".format(day.format("ddd Do-MMM")), value=msg, inline=False)
 
-    def GetDaySchedEmbed(self, day):
+    def GetDayOffset(self, day):
         dow = -(int(arrow.utcnow().to("Europe/Dublin").format("d")) - 1) + day
         if int(arrow.utcnow().to("Europe/Dublin").format("d")) > 5:
             dow += 7
-        day = arrow.utcnow().to("Europe/Dublin").shift(days=+dow)
+        day_arw = arrow.utcnow().to("Europe/Dublin").shift(days=+dow)
+        return day_arw
 
-        embed = discord.Embed(title="Schedule for {}".format(day.format("ddd")), color=0x27FF22)
+    def GetDayArwSchedEmbed(self, day_arw):
+        embed = discord.Embed(title="Schedule for {}".format(day_arw.format("ddd")), color=0x27FF22)
 
-        events = c.timeline.on(day)
-        self.PreEmbed(embed, events, day)
+        events = c.timeline.on(day_arw)
+        self.PreEmbed(embed, events, day_arw)
 
         return embed
+
+    def GetDaySchedEmbed(self, day):
+        day_arw = self.GetDayOffset(day)
+        return self.GetDayArwSchedEmbed(day_arw)
 
     def GetWeekSchedEmbed(self, week_offset):
         dow = int(arrow.utcnow().to("Europe/Dublin").format("d")) - 1
@@ -113,6 +119,10 @@ class Timetable(commands.Cog):
     def CancelEvent(self, timedate):
         day = arrow.get(timedate, "HH:mm DD-MM-YYYY", tzinfo="Europe/Dublin")
         events = c.timeline.at(day)
+        for event in events:
+            if(event.begin == day):
+                events = [event]
+                break
         embed = discord.Embed(
             title="Cancelling event - {}".format(day.format("ddd Do-MMM")), color=0x27FF22
         )
@@ -123,6 +133,28 @@ class Timetable(commands.Cog):
         else:
             embed.add_field(
                 name="Cancellation Failed.",
+                value="No event found on {}.\n".format(day.format("HH:mm ddd Do-MMM")),
+                inline=False,
+            )
+        return embed
+
+    def UncancelEvent(self, timedate):
+        day = arrow.get(timedate, "HH:mm DD-MM-YYYY", tzinfo="Europe/Dublin")
+        events = c.timeline.at(day)
+        for event in events:
+            if(event.begin == day):
+                events = [event]
+                break
+        embed = discord.Embed(
+            title="Uncancelling event - {}".format(day.format("ddd Do-MMM")), color=0x27FF22
+        )
+        if events and timedate in cancelled_events:
+            cancelled_events.remove(timedate)
+            self.UpdateCancelFile()
+            self.PreEmbed(embed, events, day)
+        else:
+            embed.add_field(
+                name="Uncancellation Failed.",
                 value="No event found on {}.\n".format(day.format("HH:mm ddd Do-MMM")),
                 inline=False,
             )
@@ -161,31 +193,31 @@ class Timetable(commands.Cog):
         """Shutdown the bot"""
         await self.bot.logout()
 
-    @commands.command(aliaes=["monday"])
+    @commands.command(aliases=["monday"])
     async def mon(self, ctx):
         """Classes for the following Monday"""
         embed = self.GetDaySchedEmbed(0)
         await ctx.send(embed=embed)
 
-    @commands.command(aliaes=["tuesday"])
+    @commands.command(aliases=["tuesday"])
     async def tue(self, ctx):
         """Classes for the following Tuesday"""
         embed = self.GetDaySchedEmbed(1)
         await ctx.send(embed=embed)
 
-    @commands.command(aliaes=["wednesday"])
-    async def wednesday(self, ctx):
+    @commands.command(aliases=["wednesday"])
+    async def wed(self, ctx):
         """Classes for the following Wednesday."""
         embed = self.GetDaySchedEmbed(2)
         await ctx.send(embed=embed)
 
-    @commands.command(aliaes=["thursday"])
+    @commands.command(aliases=["thursday"])
     async def thurs(self, ctx):
         """Classes for the following Thursday."""
         embed = self.GetDaySchedEmbed(3)
         await ctx.send(embed=embed)
 
-    @commands.command(aliaes=["friday"])
+    @commands.command(aliases=["friday"])
     async def fri(self, ctx):
         """Classes for the following Friday."""
         embed = self.GetDaySchedEmbed(4)
@@ -194,13 +226,15 @@ class Timetable(commands.Cog):
     @commands.command()
     async def today(self, ctx):
         """Classes for today."""
-        embed = self.GetDaySchedEmbed(int(arrow.utcnow().to("Europe/Dublin").format("d")) - 1)
+        day_arw = arrow.utcnow().to("Europe/Dublin")
+        embed = self.GetDayArwSchedEmbed(day_arw)
         await ctx.send(embed=embed)
 
     @commands.command()
     async def tomorrow(self, ctx):
         """Classes for tomorrow."""
-        embed = self.GetDaySchedEmbed(int(arrow.utcnow().to("Europe/Dublin").format("d")))
+        day_arw = arrow.utcnow().to("Europe/Dublin").shift(days=+1)
+        embed = self.GetDayArwSchedEmbed(day_arw)
         await ctx.send(embed=embed)
 
     @commands.has_any_role("OVERLORDS", "Mahmood")
@@ -214,6 +248,22 @@ class Timetable(commands.Cog):
         m = re.search(r"(\d+:\d+) (\d+\-\d+\-\d+)", cmd)
         if m:
             embed = self.CancelEvent(cmd)
+            await ctx.send(embed=embed)
+        else:
+            await ctx.send("Invalid time date format, please use HH:mm DD-MM-YYYY")
+
+
+    @commands.has_any_role("OVERLORDS", "Mahmood")
+    @commands.command(usage="<time> <date>")
+    async def uncancel(self, ctx, *, args):
+        """Uncancel a lecture."""
+        args = args.split()
+        if len(args) > 2:
+            await ctx.send("Expecting 2 arguments, date and time.\nE.g `!cancel 9:00 25-09-19`")
+        cmd = " ".join(args)
+        m = re.search(r"(\d+:\d+) (\d+\-\d+\-\d+)", cmd)
+        if m:
+            embed = self.UncancelEvent(cmd)
             await ctx.send(embed=embed)
         else:
             await ctx.send("Invalid time date format, please use HH:mm DD-MM-YYYY")

@@ -1,0 +1,3 @@
+[submodule "ai_dungeon_cli"]
+	path = ai_dungeon_cli
+	url = https://github.com/Zer0xFF/ai-dungeon-cli.git
