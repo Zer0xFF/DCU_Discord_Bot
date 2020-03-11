@@ -88,10 +88,10 @@ class Assessments(commands.Cog):
 
     @commands.has_any_role("OVERLORDS", "Mahmood", "Class Rep")
     @commands.command(aliases=["RemoveCA", "removeCA", "rmca", "rmCA"])
-    async def removeca(self,ctx,entry):
+    async def removeca(self,ctx,entry: int):
         #removes entries - 0 is first entry in ca list.
-        if re.search(r"\d", entry) and int(entry) <= len(assessments) - 1 and int(entry) >= 0:
-            self.remove_entry(int(entry))
+        if entry <= len(assessments) - 1 and entry >= 0:
+            self.remove_entry(entry)
             await ctx.send("Remove successful.")
         else:
             if len(assessments) > 0:
