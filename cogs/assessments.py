@@ -42,10 +42,11 @@ class Assessments(commands.Cog):
             formatted.append(f"{line[0]} {line[1]} - {' '.join(line[2:])}\n")
         return formatted
 
-    def date_validator(self, day, month, year, hour, minute):
+    def date_validator(self, date):
         #validates a date
         try:
-            datetime(year=int(year),month=int(month),day=int(day),hour=int(hour), minute=int(minute))
+            datetime.strptime(date.strip(), "%d/%m/%y %H:%M")
+            #datetime(year=int(year),month=int(month),day=int(day),hour=int(hour), minute=int(minute))
         except ValueError:
             return False
         return True
@@ -74,12 +75,8 @@ class Assessments(commands.Cog):
     async def addca(self,ctx,date,time,module,*,description):
         #Adds entries
         isValidDate = False
-        split_date = date.split("/")
-        split_time = time.split(":")
-        if (len(split_date) == 3) and (len(split_time) == 2):   #deals with date/time not being first 2 inputs.
-            day, month, year = split_date
-            hour, minute = split_time
-            isValidDate = self.date_validator(day, month, year, hour, minute)
+        if (len(date.split("/")) == 3) and (len(time.split(":")) == 2):   #deals with date/time not being first 2 inputs.
+            isValidDate = self.date_validator(date + " " + time)
 
         if isValidDate:
             assessments.append(f"{date} {time} {module} {description.strip()}")
