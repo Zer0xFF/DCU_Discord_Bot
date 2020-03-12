@@ -14,6 +14,8 @@ assessments = []
 
 
 class Assessments(commands.Cog):
+    file = "assessments.txt"
+
     def __init__(self,bot):
         self.bot = bot
         self.load_assessments_file()
@@ -21,17 +23,17 @@ class Assessments(commands.Cog):
 
     def load_assessments_file(self):
         #Load file which contains all upcoming assessments
-        if os.path.isfile("assessments.txt"):
-            with open("assessments.txt", "r") as f:
+        if os.path.isfile(self.file):
+            with open(self.file, "r") as f:
                 for line in f:
                     line = line.strip()
                     assessments.append(line)
         else:
-            open('assessments.txt', 'a').close()
+            open(self.file, 'a').close()
 
     def update_assessments_file(self):
         #Update file which contains all upcoming assessments
-        with open("assessments.txt", "w") as f:
+        with open(self.file, "w") as f:
             for assessment in assessments:
                 f.write(assessment)
                 f.write("\n")
@@ -48,7 +50,6 @@ class Assessments(commands.Cog):
         #validates a date
         try:
             datetime.strptime(date.strip(), "%d/%m/%y %H:%M")
-            #datetime(year=int(year),month=int(month),day=int(day),hour=int(hour), minute=int(minute))
         except ValueError:
             return False
         return True
