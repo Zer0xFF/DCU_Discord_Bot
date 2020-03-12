@@ -4,10 +4,11 @@ import re
 import arrow
 import discord
 import requests
-from discord.ext import commands
+from discord.ext import commands, tasks
 import time
 import sys
 from datetime import datetime
+from datetime import timedelta
 
 assessments = []
 
@@ -16,6 +17,7 @@ class Assessments(commands.Cog):
     def __init__(self,bot):
         self.bot = bot
         self.load_assessments_file()
+        self.ca_cleanup_loop.start()
 
     def load_assessments_file(self):
         #Load file which contains all upcoming assessments
@@ -53,7 +55,7 @@ class Assessments(commands.Cog):
 
     def date_sorter(self):
         #sorts asssessments by dates and times
-        assessments.sort(key=lambda date: datetime.strptime(date[0:14], "%d/%m/%y %H:%M"))
+        assessments.sort(key=lambda date: datetime.strptime(date[:14], "%d/%m/%y %H:%M"))
 
     def remove_entry(self, entry):
         #removes entry at index entry
@@ -98,6 +100,13 @@ class Assessments(commands.Cog):
                 await ctx.send(f"Invalid entry, use an index of {len(assessments)-1} or below.")
             else:
                 await ctx.send("Invalid entry, there are currently no active assignments.")
+
+    @tasks.loop(seconds=5.0)
+    async def ca_cleanup_loop(self):
+        if len(assessments) > 0:
+            nearest_ca_datetime = datetime.strptime(assessments[0][:14], "%d/%m/%y %H:%M")
+            if nearest_ca_datetime < datetime.now():
+                self.remove_entry(0)
 
 def setup(bot):
     bot.add_cog(Assessments(bot))
