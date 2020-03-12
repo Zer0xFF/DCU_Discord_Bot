@@ -64,7 +64,7 @@ class Assessments(commands.Cog):
         self.update_assessments_file()
 
     @commands.command(aliases=["CA", "assessments", "ass"])
-    async def ca(self,ctx):
+    async def ca(self, ctx):
         if len(assessments) > 0:
             formatted = self.desc_formatter()
             embed = discord.Embed(title="{}".format("**Upcoming Assessment(s)**"),color=0x78ff83, description="\n".join(formatted))
@@ -75,7 +75,7 @@ class Assessments(commands.Cog):
 
     @commands.has_any_role("OVERLORDS", "Mahmood", "Class Rep")
     @commands.command(aliases=["addCA","add_ass"])
-    async def addca(self,ctx,date,time,module,*,description):
+    async def addca(self, ctx, date, time, module, *, description):
         #Adds entries
         isValidDate = False
         if (len(date.split("/")) == 3) and (len(time.split(":")) == 2):   #deals with date/time not being first 2 inputs.
@@ -90,8 +90,8 @@ class Assessments(commands.Cog):
             await ctx.send("Invalid date or time, use DD/MM/YY and HH:MM (24 hour clock).")
 
     @commands.has_any_role("OVERLORDS", "Mahmood", "Class Rep")
-    @commands.command(aliases=["RemoveCA", "removeCA", "rmca", "rmCA","clean_ass"])
-    async def removeca(self,ctx,entry: int):
+    @commands.command(aliases=["RemoveCA", "removeCA", "rmca", "rmCA", "clean_ass"])
+    async def removeca(self, ctx, entry: int):
         #removes entries - 0 is first entry in ca list.
         if entry <= len(assessments) - 1 and entry >= 0:
             self.remove_entry(entry)
@@ -102,7 +102,7 @@ class Assessments(commands.Cog):
             else:
                 await ctx.send("Invalid entry, there are currently no active assignments.")
 
-    @tasks.loop(hours=24.0)
+    @tasks.loop(hours=24)
     async def ca_cleanup_loop(self):
         if len(assessments) > 0:
             nearest_ca_datetime = datetime.strptime(assessments[0][:14], "%d/%m/%y %H:%M")
