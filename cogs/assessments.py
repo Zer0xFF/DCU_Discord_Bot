@@ -101,12 +101,14 @@ class Assessments(commands.Cog):
             else:
                 await ctx.send("Invalid entry, there are currently no active assignments.")
 
-    @tasks.loop(seconds=5.0)
+    @tasks.loop(hours=24.0)
     async def ca_cleanup_loop(self):
         if len(assessments) > 0:
             nearest_ca_datetime = datetime.strptime(assessments[0][:14], "%d/%m/%y %H:%M")
-            if nearest_ca_datetime < datetime.now():
+            while len(assessments) > 0 and nearest_ca_datetime < datetime.now():
                 self.remove_entry(0)
+                if len(assessments) > 0:
+                    nearest_ca_datetime = datetime.strptime(assessments[0][:14], "%d/%m/%y %H:%M")
 
 def setup(bot):
     bot.add_cog(Assessments(bot))
