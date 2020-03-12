@@ -62,7 +62,7 @@ class Assessments(commands.Cog):
         del assessments[entry]
         self.update_assessments_file()
 
-    @commands.command(aliases=["CA", "assessments"])
+    @commands.command(aliases=["CA", "assessments", "ass"])
     async def ca(self,ctx):
         if len(assessments) > 0:
             formatted = self.desc_formatter()
@@ -73,7 +73,7 @@ class Assessments(commands.Cog):
             await ctx.send(embed=embed)
 
     @commands.has_any_role("OVERLORDS", "Mahmood", "Class Rep")
-    @commands.command(aliases=["addCA"])
+    @commands.command(aliases=["addCA","add_ass"])
     async def addca(self,ctx,date,time,module,*,description):
         #Adds entries
         isValidDate = False
@@ -89,7 +89,7 @@ class Assessments(commands.Cog):
             await ctx.send("Invalid date or time, use DD/MM/YY and HH:MM (24 hour clock).")
 
     @commands.has_any_role("OVERLORDS", "Mahmood", "Class Rep")
-    @commands.command(aliases=["RemoveCA", "removeCA", "rmca", "rmCA"])
+    @commands.command(aliases=["RemoveCA", "removeCA", "rmca", "rmCA","clean_ass"])
     async def removeca(self,ctx,entry: int):
         #removes entries - 0 is first entry in ca list.
         if entry <= len(assessments) - 1 and entry >= 0:
