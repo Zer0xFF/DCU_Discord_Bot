@@ -58,6 +58,13 @@ class Assessments(commands.Cog):
         del assessments[entry]
         self.update_assessments_file()
 
+    def ca_cleanup(self):
+        nearest_ca_datetime = datetime.strptime(assessments[0][:14], "%d/%m/%y %H:%M")
+        while len(assessments) > 0 and nearest_ca_datetime < datetime.now():
+            self.remove_entry(0)
+            if len(assessments) > 0:
+                nearest_ca_datetime = datetime.strptime(assessments[0][:14], "%d/%m/%y %H:%M")
+
     def cog_unload(self):
         self.ca_cleanup_loop.cancel()
 
@@ -103,11 +110,7 @@ class Assessments(commands.Cog):
     @tasks.loop(hours=24)
     async def ca_cleanup_loop(self):
         if len(assessments) > 0:
-            nearest_ca_datetime = datetime.strptime(assessments[0][:14], "%d/%m/%y %H:%M")
-            while len(assessments) > 0 and nearest_ca_datetime < datetime.now():
-                self.remove_entry(0)
-                if len(assessments) > 0:
-                    nearest_ca_datetime = datetime.strptime(assessments[0][:14], "%d/%m/%y %H:%M")
+            self.ca_cleanup()
 
     @commands.has_any_role("OVERLORDS", "Mahmood", "Class Rep")
     @commands.command()
@@ -119,7 +122,6 @@ class Assessments(commands.Cog):
             await ctx.send("All assessments cleared.")
         else:
             await ctx.send("Assessments already clear.")
-
 
 def setup(bot):
     bot.add_cog(Assessments(bot))
