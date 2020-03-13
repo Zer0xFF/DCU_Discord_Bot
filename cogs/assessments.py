@@ -36,9 +36,11 @@ class Assessments(commands.Cog):
     def desc_formatter(self):
         #Description formatting
         formatted = []
+        line_index = 0
         for line in assessments:
             line = line.strip().split()
-            formatted.append(f"{line[0]} {line[1]} - {' '.join(line[2:])}\n")
+            formatted.append(f"**{line_index}.** {line[0][:5]} {line[1]} - {' '.join(line[2:])}\n")
+            line_index += 1
         return formatted
 
     def date_validator(self, date):
