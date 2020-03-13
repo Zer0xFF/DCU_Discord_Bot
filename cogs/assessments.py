@@ -36,9 +36,11 @@ class Assessments(commands.Cog):
     def desc_formatter(self):
         #Description formatting
         formatted = []
+        line_index = 0
         for line in assessments:
             line = line.strip().split()
-            formatted.append(f"{line[0]} {line[1]} - {' '.join(line[2:])}\n")
+            formatted.append(f"**{line_index}.** {line[0][:5]} {line[1]} - {' '.join(line[2:])}\n")
+            line_index += 1
         return formatted
 
     def date_validator(self, date):
@@ -57,6 +59,13 @@ class Assessments(commands.Cog):
         #removes entry at index entry
         del assessments[entry]
         self.update_assessments_file()
+
+    def ca_cleanup(self):
+        nearest_ca_datetime = datetime.strptime(assessments[0][:14], "%d/%m/%y %H:%M")
+        while len(assessments) > 0 and nearest_ca_datetime < datetime.now():
+            self.remove_entry(0)
+            if len(assessments) > 0:
+                nearest_ca_datetime = datetime.strptime(assessments[0][:14], "%d/%m/%y %H:%M")
 
     def cog_unload(self):
         self.ca_cleanup_loop.cancel()
@@ -88,7 +97,7 @@ class Assessments(commands.Cog):
             await ctx.send("Invalid date or time, use DD/MM/YY and HH:MM (24 hour clock).")
 
     @commands.has_any_role("OVERLORDS", "Mahmood", "Class Rep")
-    @commands.command(aliases=["RemoveCA", "removeCA", "rmca", "rmCA", "clean_ass"])
+    @commands.command(aliases=["RemoveCA", "removeCA", "rmca", "rmCA"])
     async def removeca(self, ctx, entry: int):
         #removes entries - 0 is first entry in ca list.
         if entry <= len(assessments) - 1 and entry >= 0:
@@ -103,11 +112,7 @@ class Assessments(commands.Cog):
     @tasks.loop(hours=24)
     async def ca_cleanup_loop(self):
         if len(assessments) > 0:
-            nearest_ca_datetime = datetime.strptime(assessments[0][:14], "%d/%m/%y %H:%M")
-            while len(assessments) > 0 and nearest_ca_datetime < datetime.now():
-                self.remove_entry(0)
-                if len(assessments) > 0:
-                    nearest_ca_datetime = datetime.strptime(assessments[0][:14], "%d/%m/%y %H:%M")
+            self.ca_cleanup()
 
     @commands.has_any_role("OVERLORDS", "Mahmood", "Class Rep")
     @commands.command()
@@ -120,6 +125,14 @@ class Assessments(commands.Cog):
         else:
             await ctx.send("Assessments already clear.")
 
+    @commands.has_any_role("OVERLORDS", "Mahmood", "Class Rep")
+    @commands.command(aliases=["cleanCA", "clean_ass"])
+    async def cleanca(self, ctx):
+        if len(assessments) > 0:
+            self.ca_cleanup()
+            await ctx.send("All clean.")
+        else:
+            await ctx.send("Unable to cleanup, there are currently no active assessments.")
 
 def setup(bot):
     bot.add_cog(Assessments(bot))
