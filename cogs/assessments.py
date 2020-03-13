@@ -95,7 +95,7 @@ class Assessments(commands.Cog):
             await ctx.send("Invalid date or time, use DD/MM/YY and HH:MM (24 hour clock).")
 
     @commands.has_any_role("OVERLORDS", "Mahmood", "Class Rep")
-    @commands.command(aliases=["RemoveCA", "removeCA", "rmca", "rmCA", "clean_ass"])
+    @commands.command(aliases=["RemoveCA", "removeCA", "rmca", "rmCA"])
     async def removeca(self, ctx, entry: int):
         #removes entries - 0 is first entry in ca list.
         if entry <= len(assessments) - 1 and entry >= 0:
@@ -124,7 +124,7 @@ class Assessments(commands.Cog):
             await ctx.send("Assessments already clear.")
 
     @commands.has_any_role("OVERLORDS", "Mahmood", "Class Rep")
-    @commands.command(aliases=["cleanCA"])
+    @commands.command(aliases=["cleanCA", "clean_ass"])
     async def cleanca(self, ctx):
         if len(assessments) > 0:
             self.ca_cleanup()
