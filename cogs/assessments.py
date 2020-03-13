@@ -123,5 +123,14 @@ class Assessments(commands.Cog):
         else:
             await ctx.send("Assessments already clear.")
 
+    @commands.has_any_role("OVERLORDS", "Mahmood", "Class Rep")
+    @commands.command(aliases=["cleanCA"])
+    async def cleanca(self, ctx):
+        if len(assessments) > 0:
+            self.ca_cleanup()
+            await ctx.send("All clean.")
+        else:
+            await ctx.send("Unable to cleanup, there are currently no active assessments.")
+
 def setup(bot):
     bot.add_cog(Assessments(bot))
