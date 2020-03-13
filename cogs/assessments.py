@@ -1,14 +1,9 @@
-import json
 import os
-import re
-import arrow
 import discord
-import requests
-from discord.ext import commands, tasks
-import time
 import sys
+from discord.ext import commands, tasks
 from datetime import datetime
-from datetime import timedelta
+
 
 assessments = []
 
