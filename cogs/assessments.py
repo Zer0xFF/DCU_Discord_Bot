@@ -109,5 +109,17 @@ class Assessments(commands.Cog):
                 if len(assessments) > 0:
                     nearest_ca_datetime = datetime.strptime(assessments[0][:14], "%d/%m/%y %H:%M")
 
+    @commands.has_any_role("OVERLORDS", "Mahmood", "Class Rep")
+    @commands.command()
+    async def clear_all_assessments(self, ctx):
+        #clears all assessments, has a long and annoying name to prevent accidental use.
+        if len(assessments) > 0:
+            while len(assessments) > 0:
+                self.remove_entry(0)
+            await ctx.send("All assessments cleared.")
+        else:
+            await ctx.send("Assessments already clear.")
+
+
 def setup(bot):
     bot.add_cog(Assessments(bot))
