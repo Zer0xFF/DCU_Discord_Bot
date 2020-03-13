@@ -63,6 +63,9 @@ class Assessments(commands.Cog):
         del assessments[entry]
         self.update_assessments_file()
 
+    def cog_unload(self):
+        self.ca_cleanup_loop.cancel()
+
     @commands.command(aliases=["CA", "assessments", "ass"])
     async def ca(self, ctx):
         if len(assessments) > 0:
