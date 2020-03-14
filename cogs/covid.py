@@ -4,6 +4,7 @@ import discord
 from discord.ext import commands
 import urllib
 from bs4 import BeautifulSoup
+import random
 
 class Covid(commands.Cog):
     """Live infected numbers for COVID-19"""
@@ -43,7 +44,8 @@ class Covid(commands.Cog):
                 embed.add_field(name=headers[i], value=val)
 
             await ctx.send(embed=embed)
-            await ctx.send("https://www.youtube.com/watch?v=cphNpqKpKc4")
+            if(random.randint(0, 100) <= 2):
+                await ctx.send("https://www.youtube.com/watch?v=cphNpqKpKc4")
         else:
             await ctx.send("Country not found.")
 
