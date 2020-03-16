@@ -21,7 +21,7 @@ class Covid(commands.Cog):
             return await response.text()
 
     @commands.command(aliases=["covid-19", "coronavirus", "covid", "corona"])
-    async def get_covid(self, ctx, country=None):
+    async def get_covid(self, ctx, *, country=None):
         """COVID-19 RealTime Info"""
         res = await self.get(
                 "https://www.worldometers.info/coronavirus/")
