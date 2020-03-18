@@ -12,14 +12,15 @@ class Whisper(commands.Cog):
     def cog_unload(self):
         self.bot.loop.create_task(self.session.detach())
 
-    @commands.Cog.listener()
-    async def on_message(self, message):
-        # channel id for public server
+    @commands.dm_only()
+    @commands.command(aliases=["whisper"])
+    async def get_whisper(self, ctx, *message: str):
+        """Psst Psst"""
         channel = self.bot.get_channel(689165985164558435)
-        if message.guild is None:
-            if message.author != self.bot.user:
-                if message.content.startswith("!whisper "):
-                    await channel.send(message.content[8:])
+        if ctx.guild is None:
+            if ctx.author != self.bot.user:
+                await channel.send(' '.join(message))
+
 
 def setup(bot):
     bot.add_cog(Whisper(bot))
