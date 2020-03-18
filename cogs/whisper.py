@@ -9,15 +9,12 @@ class Whisper(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    def cog_unload(self):
-        self.bot.loop.create_task(self.session.detach())
-
     @commands.dm_only()
     @commands.command(aliases=["whisper"])
     async def psst(self, ctx, *,message: str):
         """Psst - PM the bot with the !whisper prefix,
         along with your message."""
-        channel = self.bot.get_channel(689165985164558435)
+        channel = self.bot.get_channel(688032983038689310)#689165985164558435)
         await channel.send(message)
 
 
