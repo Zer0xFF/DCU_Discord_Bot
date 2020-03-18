@@ -3,7 +3,9 @@ import discord
 from discord.ext import commands
 
 class Whisper(commands.Cog):
-    """Whispers, for DCU Bot."""
+    """Whispers, for DCU Bot.
+    PM the bot with the !whisper prefix,
+    along with your message."""
 
     def __init__(self, bot):
         self.bot = bot
@@ -14,12 +16,11 @@ class Whisper(commands.Cog):
 
     @commands.dm_only()
     @commands.command(aliases=["whisper"])
-    async def get_whisper(self, ctx, *,message: str):
-        """Psst Psst"""
+    async def psst(self, ctx, *,message: str):
+        """Psst - PM the bot with the !whisper prefix,
+        along with your message."""
         channel = self.bot.get_channel(689165985164558435)
-        if ctx.guild is None:
-            if ctx.author != self.bot.user:
-                await channel.send(message)
+        await channel.send(message)
 
 
 def setup(bot):
