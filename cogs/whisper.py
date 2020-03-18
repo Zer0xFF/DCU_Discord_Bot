@@ -1,4 +1,3 @@
-import aiohttp
 import discord
 from discord.ext import commands
 
@@ -9,7 +8,6 @@ class Whisper(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-        self.session = aiohttp.ClientSession(loop=self.bot.loop)
 
     def cog_unload(self):
         self.bot.loop.create_task(self.session.detach())
