@@ -14,7 +14,7 @@ class Whisper(commands.Cog):
     async def psst(self, ctx, *,message: str):
         """Psst - PM the bot with the !whisper prefix,
         along with your message."""
-        channel = self.bot.get_channel(688032983038689310)#689165985164558435)
+        channel = self.bot.get_channel(689165985164558435)
         await channel.send(message)
 
 
