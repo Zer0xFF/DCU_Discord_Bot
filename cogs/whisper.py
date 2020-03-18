@@ -1,4 +1,6 @@
+import os
 import discord
+import hashlib
 from discord.ext import commands
 
 class Whisper(commands.Cog):
@@ -14,8 +16,14 @@ class Whisper(commands.Cog):
     async def psst(self, ctx, *,message: str):
         """Psst - PM the bot with the !whisper prefix,
         along with your message."""
+        
+        random_animals = ['Ferret', 'Donkey', 'Robin', 'Platypus', 'Moose', 'Panda', 'Aardvark', 'Dog', 'Ant', 'Cheetah', 'Chicken', 'Duck', 'Eagle', 'Gecko', 'Lion', 'Pig', 'Wolf'] 
+        random_adjectives = ['Alert', 'Alive', 'Amused', 'Clever', 'Crazy', 'Dizzy', 'Jolly', 'Brave', 'Tired', 'Busy', 'Bored']
+
+        seed = os.environ.get('WHISPERHASH')
         channel = self.bot.get_channel(689655916223660095)
-        await channel.send(message)
+        namehash = abs(hash(ctx.message.author.mention)*hash(seed)) % (10 ** 8)
+        await channel.send(random_adjectives[namehash % len(random_adjectives)] + " " + random_animals[namehash % len(random_animals)] + ":  " + message)
 
 
 def setup(bot):
