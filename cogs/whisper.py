@@ -14,12 +14,12 @@ class Whisper(commands.Cog):
 
     @commands.dm_only()
     @commands.command(aliases=["whisper"])
-    async def get_whisper(self, ctx, *message: str):
+    async def get_whisper(self, ctx, *,message: str):
         """Psst Psst"""
         channel = self.bot.get_channel(689165985164558435)
         if ctx.guild is None:
             if ctx.author != self.bot.user:
-                await channel.send(' '.join(message))
+                await channel.send(message)
 
 
 def setup(bot):
