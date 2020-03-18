@@ -23,7 +23,7 @@ class Whisper(commands.Cog):
         seed = os.environ.get('WHISPERHASH')
         channel = self.bot.get_channel(689655916223660095)
         namehash = abs(hash(ctx.message.author.mention)*hash(seed)) % (10 ** 8)
-        await channel.send(random_adjectives[namehash % len(random_adjectives)] + " " + random_animals[namehash % len(random_animals)] + ":  " + message)
+        await channel.send(random_adjectives[namehash % len(random_adjectives)] + " " + random_animals[namehash -24 % len(random_animals)] + ":  " + message)
 
 
 def setup(bot):
