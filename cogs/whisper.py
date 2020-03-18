@@ -8,7 +8,6 @@ class Whisper(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.session = aiohttp.ClientSession(loop=self.bot.loop)
-        # self.client = commands.Bot(command_prefix="whisper")
 
     def cog_unload(self):
         self.bot.loop.create_task(self.session.detach())
