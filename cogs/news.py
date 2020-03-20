@@ -27,7 +27,7 @@ class News(commands.Cog):
         Message the bot with the !news prefix along with your 
         news link to have it appear in the news channel."""
         user = ctx.message.author
-        channel = self.bot.get_channel(<INSERT-CHANNEL-ID>)
+        channel = self.bot.get_channel(683469031004700693)
         if await self.validate(url_link):
             output = "{:s} : {:s}".format(user.display_name,url_link)
             await channel.send(output)
