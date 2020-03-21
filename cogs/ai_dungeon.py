@@ -38,7 +38,7 @@ class AI_Dungeon(commands.Cog):
     def discord_queue_msg(self, txt):
         self.pending_msg.append("```{}```".format(txt))
 
-    @commands.has_any_role("OVERLORDS", "Mahmood")
+    @commands.has_any_role("Overlord", "Mahmood")
     @commands.command()
     async def start_game(self, ctx, setting_id, character_id, character_name="Zer0xFF"):
         """Ai Dungeon"""
@@ -95,7 +95,7 @@ class AI_Dungeon(commands.Cog):
             if(self.connections == 0 and len(self.pending_input) > 0):
                 self.pending_input.clear()
 
-    @commands.has_any_role("OVERLORDS", "Mahmood")
+    @commands.has_any_role("Overlord", "Mahmood")
     @commands.command()
     async def debug_game(self, ctx):
         await ctx.send("```Session:{}\nIteration:{}\nConnections:{}\nPending Input:{}\nPending Msg:{}```".format(self.session.session_id, self.session.prompt_iteration, self.connections, len(self.pending_input), len(self.pending_msg)))
@@ -104,7 +104,7 @@ class AI_Dungeon(commands.Cog):
         if(self.pending_msg):
             await ctx.send("```{}```".format(self.pending_msg))
 
-    @commands.has_any_role("OVERLORDS", "Mahmood")
+    @commands.has_any_role("Overlord", "Mahmood")
     @commands.command()
     async def clear_pending_game(self, ctx, what):
         if(what == "input"):
@@ -112,7 +112,7 @@ class AI_Dungeon(commands.Cog):
         if(what == "msg"):
             self.pending_msg.clear()
 
-    @commands.has_any_role("OVERLORDS", "Mahmood")
+    @commands.has_any_role("Overlord", "Mahmood")
     @commands.command()
     async def resume_game(self, ctx, id: str):
         self.session.resume_story(id)
