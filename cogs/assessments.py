@@ -97,7 +97,7 @@ class Assessments(commands.Cog):
             await ctx.send("Invalid date or time, use DD/MM/YY and HH:MM (24 hour clock).")
 
     @commands.has_any_role("Overlord", "Mahmood", "Class Rep")
-    @commands.command(aliases=["RemoveCA", "removeCA", "rmca", "rmCA"])
+    @commands.command(aliases=["RemoveCA", "removeCA", "rmca", "rmCA", "remove_ass"])
     async def removeca(self, ctx, entry: int):
         #removes entries - 0 is first entry in ca list.
         if entry <= len(assessments) - 1 and entry >= 0:
