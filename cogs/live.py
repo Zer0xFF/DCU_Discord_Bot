@@ -52,7 +52,8 @@ class Live(commands.Cog):
 
     @commands.command()
     async def live(self, ctx, *, message : str):
-        """Create a new live chat"""
+        """Create a new live chat which expires after some time"""
+        await self.create_live(ctx)
         pass
 
 def setup(bot):
