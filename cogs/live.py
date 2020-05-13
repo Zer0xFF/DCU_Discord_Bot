@@ -2,21 +2,21 @@ import discord
 from discord.ext import commands
 
 # === Dummy functions ===
-def SCHEDULE(*args, **kwargs):
+async def SCHEDULE(*args, **kwargs):
     pass
-def NOW():
+async def NOW():
     return 0
 # === end dummy functions ===
 
 # === utils/sequel_name.py
 # TODO: use Fast naming convention instead of boring Windows convention
-def sequel_name(name, number):
+async def sequel_name(name, number):
     """increments a string to prevent naming conflicts"""
     if number <= 1:
         return name
     return f"{name}({number})"
 
-def resolve_sequel_name(basename, condition):
+async def resolve_sequel_name(basename, condition):
     """iterate through sequel names until the condition is met"""
     out = basename
     i = 1
@@ -35,16 +35,20 @@ class Live(commands.Cog):
     def cog_unload(self):
         self.bot.loop.create_task(self.session.detach())
 
-    def create_live(self, ctx, name="live-chat", start=None, topic=None, duration=3600, **kwargs):
+    async def create_live(self, ctx, name="live-chat", start=None, topic=None, duration=3600, **kwargs):
         if start != None:
-            SCHEDULE(start, create_live, name, start, topic, duration, **kwargs)
+            await SCHEDULE(start, create_live, name, start, topic, duration, **kwargs)
+            return
+            #TODO: find some way to return a reference to the to-be created channel
         
-        name = resolve_sequel_name(
+        name = await resolve_sequel_name(
                 name,
                 lambda name : len(discord.utils.get(ctx.guild.text_channels, name=name)) == 0
             )
-        channel = ctx.guild.create_text_channel(name, topic) 
-        SCHEDULE(NOW() + duration, channel.delete, "Expired") #TODO: more verbose reason
+        channel = await ctx.guild.create_text_channel(name, topic) 
+        await SCHEDULE(NOW() + duration, channel.delete, "Expired") #TODO: more verbose reason
+
+        return channel
 
     @commands.command()
     async def live(self, ctx, *, message : str):
