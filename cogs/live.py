@@ -20,7 +20,7 @@ async def resolve_sequel_name(basename, condition):
     """iterate through sequel names until the condition is met"""
     out = basename
     i = 1
-    while condition(out):
+    while not condition(out):
         out = sequel_name(out, i)
         i += 1
     return out
