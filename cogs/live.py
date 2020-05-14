@@ -85,13 +85,3 @@ class Live(commands.Cog):
 def setup(bot):
     bot.add_cog(Live(bot))
 
-from time import sleep
-async def main():
-    await schedule(2, print, "hello-world")
-    print(await resolve_sequel_name("goodbye-world", lambda name : len(name) > len("goodbye-world(4)")))
-    sleep(5)
-
-import asyncio
-if __name__ == "__main__":
-    asyncio.run(main())
-
