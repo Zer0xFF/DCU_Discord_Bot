@@ -1,12 +1,23 @@
 import discord
 from discord.ext import commands
 
-# === Dummy functions ===
-async def SCHEDULE(*args, **kwargs):
-    pass
-async def NOW():
-    return 0
-# === end dummy functions ===
+# === utils/scheduling.py
+import sched, _thread
+from time import time as now
+
+async def schedule_abs(time, func, *args, **kwargs):
+    delay = time - now()
+    await schedule(delay, func, *args, **kwargs)
+
+async def schedule(delay, func, *args, **kwargs):
+    #TODO: use existing scheduler and existing thread, instead of spawning each time
+    s = sched.scheduler()
+    s.enter(delay, 3, func, args, kwargs)
+    _thread.start_new_thread(
+            lambda  *_: s.run(), #~~~~~~~ted~bundy~did~9~11~~~~
+            (0,0)
+    )
+# === endutil
 
 # === utils/sequel_name.py
 # TODO: use Fast naming convention instead of boring Windows convention
@@ -24,7 +35,7 @@ async def resolve_sequel_name(basename, condition):
         out = sequel_name(out, i)
         i += 1
     return out
-# == end
+# == endutil
 
 class Live(commands.Cog):
     """Used for the creation of temporary live chats"""
@@ -35,9 +46,9 @@ class Live(commands.Cog):
     def cog_unload(self):
         self.bot.loop.create_task(self.session.detach())
 
-    async def create_live(self, ctx, name="live-chat", start=None, topic=None, duration=3600, **kwargs):
+    async def create_live(self, ctx, name="live-chat", start=None, topic=None, duration=10):
         if start != None:
-            await SCHEDULE(start, create_live, name, start, topic, duration, **kwargs)
+            await schedule_abs(start, create_live, name, start, topic, duration)
             return
             #TODO: find some way to return a reference to the to-be created channel
         
@@ -46,7 +57,7 @@ class Live(commands.Cog):
                 lambda name : len(discord.utils.get(ctx.guild.text_channels, name=name)) == 0
             )
         channel = await ctx.guild.create_text_channel(name, topic) 
-        await SCHEDULE(NOW() + duration, channel.delete, "Expired") #TODO: more verbose reason
+        await schedule(duration, channel.delete, "Expired") #TODO: more verbose reason
 
         return channel
 
