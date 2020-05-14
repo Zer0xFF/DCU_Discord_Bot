@@ -69,9 +69,9 @@ class Live(commands.Cog):
         
         name = await resolve_sequel_name(
                 name,
-                lambda name : len(discord.utils.get(ctx.guild.text_channels, name=name)) == 0
+                    lambda name : (discord.utils.get(ctx.guild.text_channels, name=name)) is None
             )
-        channel = await ctx.guild.create_text_channel(name, topic) 
+        channel = await ctx.guild.create_text_channel(name) 
         await schedule(duration, channel.delete, "Expired") #TODO: more verbose reason
 
         return channel
