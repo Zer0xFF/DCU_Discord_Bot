@@ -1,6 +1,20 @@
 import discord
 from discord.ext import commands
 
+# === utils/discord_names.py
+async def to_text_channel_name(s):
+    # no I won't "just use regex" shut up
+    out = ""
+    s = s.lower()
+    for c in s:
+        if 'a' <= c <= 'z' or '0' <= c <= '9':
+            out += c
+        elif c == ' ':
+            out += '-'
+    return out
+
+# === endutil
+
 # === utils/runfunc.py
 from inspect import iscoroutinefunction as isasync
 import asyncio
@@ -72,16 +86,22 @@ class Live(commands.Cog):
                     lambda name : (discord.utils.get(ctx.guild.text_channels, name=name)) is None
             )
         channel = await ctx.guild.create_text_channel(name) 
-        await schedule(duration, channel.delete, "Expired") #TODO: more verbose reason
+        await schedule(duration, channel.delete) #TODO: more verbose reason
 
         return channel
 
     @commands.command()
-    async def live(self, ctx, *, message : str):
+    async def live(self, ctx, *, message : str =""):
         """Create a new live chat which expires after some time"""
-        await self.create_live(ctx)
+        try:
+            await self.create_live(ctx)
+        except discord.Forbidden:
+            await ctx.send("Bot lacks permissions")
         pass
 
 def setup(bot):
     bot.add_cog(Live(bot))
 
+import asyncio
+if __name__ == "__main__":
+    print(asyncio.run(to_text_channel_name("Eat my ent1r3 A$$")))
