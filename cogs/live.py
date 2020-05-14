@@ -69,3 +69,14 @@ class Live(commands.Cog):
 
 def setup(bot):
     bot.add_cog(Live(bot))
+
+from time import sleep
+async def main():
+    await schedule(0, sequel_name, "hello-world", 4)
+    sleep(5)
+
+
+import asyncio
+if __name__ == "__main__":
+    asyncio.run(main())
+
