@@ -1,6 +1,20 @@
 import discord
 from discord.ext import commands
 
+# === utils/runfunc.py
+from inspect import iscoroutinefunction as isasync
+import asyncio
+
+async def run_func_or_coroutine(func, *args, **kwargs):
+    """used to run a functions and coroutines indisciminately"""
+    if isasync(func):
+        return await func(*args, **kwargs)
+    return func(*args, **kwargs)
+
+async def wrap_async(func, *args, **kwargs):
+    return lambda *a, **k : asyncio.run(run_func_or_coroutine(func, *a, **k))
+# === endutil
+
 # === utils/scheduling.py
 import sched, _thread
 from time import time as now
@@ -10,11 +24,12 @@ async def schedule_abs(time, func, *args, **kwargs):
     await schedule(delay, func, *args, **kwargs)
 
 async def schedule(delay, func, *args, **kwargs):
+    func = await wrap_async(func, *args, **kwargs)
     #TODO: use existing scheduler and existing thread, instead of spawning each time
     s = sched.scheduler()
     s.enter(delay, 3, func, args, kwargs)
     _thread.start_new_thread(
-            lambda  *_: s.run(), #~~~~~~~ted~bundy~did~9~11~~~~
+            lambda  *_: s.run(),
             (0,0)
     )
 # === endutil
@@ -32,7 +47,7 @@ async def resolve_sequel_name(basename, condition):
     out = basename
     i = 1
     while not condition(out):
-        out = sequel_name(out, i)
+        out = await sequel_name(basename, i)
         i += 1
     return out
 # == endutil
@@ -72,9 +87,9 @@ def setup(bot):
 
 from time import sleep
 async def main():
-    await schedule(0, sequel_name, "hello-world", 4)
+    await schedule(2, print, "hello-world")
+    print(await resolve_sequel_name("goodbye-world", lambda name : len(name) > len("goodbye-world(4)")))
     sleep(5)
-
 
 import asyncio
 if __name__ == "__main__":
