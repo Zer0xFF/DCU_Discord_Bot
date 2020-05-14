@@ -54,7 +54,7 @@ async def sequel_name(name, number):
     """increments a string to prevent naming conflicts"""
     if number <= 1:
         return name
-    return f"{name}({number})"
+    return f"{name}{number}"
 
 async def resolve_sequel_name(basename, condition):
     """iterate through sequel names until the condition is met"""
@@ -102,6 +102,3 @@ class Live(commands.Cog):
 def setup(bot):
     bot.add_cog(Live(bot))
 
-import asyncio
-if __name__ == "__main__":
-    print(asyncio.run(to_text_channel_name("Eat my ent1r3 A$$")))
