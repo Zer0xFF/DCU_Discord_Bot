@@ -67,7 +67,7 @@ class Live(commands.Cog):
             if message:
                 duration=int(message)
         except ValueError:
-            ctx.send("Usage: `!live <DURATION (SECONDS)>`\nBetter parsing on the way")
+            await ctx.send("Usage: `!live <DURATION (SECONDS)>`\nBetter parsing on the way")
         try:
             await self.create_live(ctx, duration=duration)
         except discord.Forbidden:
