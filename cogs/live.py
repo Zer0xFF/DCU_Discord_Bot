@@ -17,38 +17,6 @@ async def to_text_channel_name(s):
 
 # === endutil
 
-# === utils/runfunc.py
-from inspect import iscoroutinefunction as isasync
-import asyncio
-
-async def run_func_or_coroutine(func, *args, **kwargs):
-    """used to run a functions and coroutines indisciminately"""
-    if isasync(func):
-        return await func(*args, **kwargs)
-    return func(*args, **kwargs)
-
-async def wrap_async(func, *args, **kwargs):
-    return lambda *a, **k : asyncio.run(run_func_or_coroutine(func, *a, **k))
-# === endutil
-
-# === utils/scheduling.py
-import sched, _thread
-
-async def schedule_abs(time, func, *args, **kwargs):
-    delay = time - now()
-    await schedule(delay, func, *args, **kwargs)
-
-async def schedule(delay, func, *args, **kwargs):
-    func = await wrap_async(func, *args, **kwargs)
-    #TODO: use existing scheduler and existing thread, instead of spawning each time
-    s = sched.scheduler()
-    s.enter(delay, 3, func, args, kwargs)
-    _thread.start_new_thread(
-            lambda  *_: s.run(),
-            (0,0)
-    )
-# === endutil
-
 # === utils/sequel_name.py
 # TODO: use Fast naming convention instead of boring Windows convention
 async def sequel_name(name, number):
