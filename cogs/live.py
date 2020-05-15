@@ -1,5 +1,7 @@
 import discord
 from discord.ext import commands
+from time import time as now
+from asyncio import sleep
 
 # === utils/discord_names.py
 async def to_text_channel_name(s):
@@ -31,7 +33,6 @@ async def wrap_async(func, *args, **kwargs):
 
 # === utils/scheduling.py
 import sched, _thread
-from time import time as now
 
 async def schedule_abs(time, func, *args, **kwargs):
     delay = time - now()
@@ -77,16 +78,17 @@ class Live(commands.Cog):
 
     async def create_live(self, ctx, name="live-chat", start=None, topic=None, duration=10):
         if start != None:
-            await schedule_abs(start, create_live, name, start, topic, duration)
-            return
-            #TODO: find some way to return a reference to the to-be created channel
+            ctx.send(f"scheduled creation of {name} for {start}") #TODO: pretty print time
+            await sleep(start - now())
         
         name = await resolve_sequel_name(
                 name,
-                    lambda name : (discord.utils.get(ctx.guild.text_channels, name=name)) is None
+                lambda name : (discord.utils.get(ctx.guild.text_channels, name=name)) is None
             )
         channel = await ctx.guild.create_text_channel(name) 
-        await schedule(duration, channel.delete) #TODO: more verbose reason
+
+        await sleep(duration)
+        await channel.delete(reason="Expired") #TODO: more verbose reason
 
         return channel
 
