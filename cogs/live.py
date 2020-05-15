@@ -1,9 +1,10 @@
 import discord
 from discord.ext import commands
-from time import time as now
 from asyncio import sleep
+from time import time as now
 
 # === utils/discord_names.py
+#not used but will be
 async def to_text_channel_name(s):
     # no I won't "just use regex" shut up
     out = ""
@@ -14,7 +15,6 @@ async def to_text_channel_name(s):
         elif c == ' ':
             out += '-'
     return out
-
 # === endutil
 
 # === utils/sequel_name.py
@@ -58,13 +58,18 @@ class Live(commands.Cog):
         await sleep(duration)
         await channel.delete(reason="Expired") #TODO: more verbose reason
 
-        return channel
-
     @commands.command()
     async def live(self, ctx, *, message : str =""):
         """Create a new live chat which expires after some time"""
+        #I can tell this is going to get a lot messier before it gets cleaner
+        duration = 10
         try:
-            await self.create_live(ctx)
+            if message:
+                duration=int(message)
+        except ValueError:
+            ctx.send("Usage: `!live <DURATION (SECONDS)>`\nBetter parsing on the way")
+        try:
+            await self.create_live(ctx, duration=duration)
         except discord.Forbidden:
             await ctx.send("Bot lacks permissions")
         pass
