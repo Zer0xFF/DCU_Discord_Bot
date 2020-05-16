@@ -21,19 +21,24 @@ class Covid(commands.Cog):
             return await response.text()
 
     @commands.command(aliases=["covid-19", "coronavirus", "covid", "corona"])
-    async def get_covid(self, ctx, *, country=None):
+    async def get_covid(self, ctx, *, country="World"):
         """COVID-19 RealTime Info"""
         res = await self.get(
                 "https://www.worldometers.info/coronavirus/")
 
         soup = BeautifulSoup(res,'html.parser')
         headers = [h.get_text().strip() for h in soup.find("thead").find_all('th')]
-        headers[0] = 'Country'
+        headers[1] = 'Country'
 
         if(country):
-            info = next(iter([c for c in soup.find("tbody").find_all('tr') if c.td.get_text().strip().casefold() == country.casefold()]), None)
+            for tbody in soup.find_all("tbody"):
+                for tr in tbody.find_all('tr'):
+                    for td in tr.find_all('td'):
+                        if(td.get_text().strip().casefold() == country.casefold()):
+                            info = tr
+                            break
         else:
-            info = soup.find_all("tbody")[1]
+            info = soup.find_all("tbody")[0]
             info.td.string.replace_with("Global")
 
         if(info):
