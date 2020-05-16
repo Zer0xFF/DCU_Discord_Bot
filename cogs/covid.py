@@ -31,12 +31,12 @@ class Covid(commands.Cog):
         headers[1] = 'Country'
 
         if(country):
-            for tbody in soup.find_all("tbody"):
-                for tr in tbody.find_all('tr'):
-                    for td in tr.find_all('td'):
-                        if(td.get_text().strip().casefold() == country.casefold()):
-                            info = tr
-                            break
+            tbody = soup.find_all("tbody")[0];
+            for tr in tbody.find_all('tr'):
+                for td in tr.find_all('td'):
+                    if(td.get_text().strip().casefold() == country.casefold()):
+                        info = tr
+                        break
         else:
             info = soup.find_all("tbody")[0]
             info.td.string.replace_with("Global")
