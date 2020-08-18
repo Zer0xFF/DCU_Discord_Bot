@@ -43,6 +43,9 @@ class Events(commands.Cog):
         elif isinstance(error, errors.CheckFailure):
             pass
 
+        elif isinstance(error, errors.MissingAnyRole):
+            pass
+
 
 def setup(bot):
     bot.add_cog(Events(bot))
