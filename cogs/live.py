@@ -10,7 +10,7 @@ async def to_text_channel_name(s):
     out = ""
     s = s.lower()
     for c in s:
-        if 'a' <= c <= 'z' or '0' <= c <= '9':
+        if isalnum(c):
             out += c
         elif c == ' ':
             out += '-'
@@ -23,7 +23,7 @@ async def sequel_name(name, number):
     """increments a string to prevent naming conflicts"""
     if number <= 1:
         return name
-    return f"{name}{number}"
+    return f"{name}-{number}"
 
 async def resolve_sequel_name(basename, condition):
     """iterate through sequel names until the condition is met"""
@@ -33,6 +33,13 @@ async def resolve_sequel_name(basename, condition):
         out = await sequel_name(basename, i)
         i += 1
     return out
+
+async def resolve_channel_sequel_name(basename):
+    return await resolve_sequel_name (
+            basename,
+            lambda name : (discord.utils.get(ctx.guild.text_channels, name=basename)) is None
+        )
+
 # == endutil
 
 class Live(commands.Cog):
@@ -49,10 +56,7 @@ class Live(commands.Cog):
             ctx.send(f"scheduled creation of {name} for {start}") #TODO: pretty print time
             await sleep(start - now())
         
-        name = await resolve_sequel_name(
-                name,
-                lambda name : (discord.utils.get(ctx.guild.text_channels, name=name)) is None
-            )
+        name = await resolve_channel_sequel_name(name)
         channel = await ctx.guild.create_text_channel(name) 
 
         await sleep(duration)
