@@ -6,7 +6,7 @@ from time import time as now
 # === utils/discord_names.py
 #not used but will be
 async def to_text_channel_name(s):
-    # no I won't "just use regex" shut up
+    """returns the given string as a valid discord text-channel name"""
     out = ""
     s = s.lower()
     for c in s:
@@ -35,6 +35,7 @@ async def resolve_sequel_name(basename, condition):
     return out
 
 async def resolve_channel_sequel_name(basename):
+    """iterate through sequel names until a unique channel name is found"""
     return await resolve_sequel_name (
             basename,
             lambda name : (discord.utils.get(ctx.guild.text_channels, name=basename)) is None
@@ -65,7 +66,6 @@ class Live(commands.Cog):
     @commands.command()
     async def live(self, ctx, *, message : str =""):
         """Create a new live chat which expires after some time"""
-        #I can tell this is going to get a lot messier before it gets cleaner
         duration = 10
         try:
             if message:
