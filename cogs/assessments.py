@@ -79,6 +79,10 @@ class Assessments(commands.Cog):
         else:
             embed = discord.Embed(title="{}".format("**Upcoming Assessment(s)**"),color=0x78ff83, description="You are free....for now >:)")
             await ctx.send(embed=embed)
+    
+    @commands.command(aliases=["!stress_free"])
+    async def stress_free(self, ctx):
+        await ctx.send("You have no assessments! (One can dream - Now get back to work!)")
 
     @commands.has_any_role("Overlord", "Mahmood", "Class Rep")
     @commands.command(aliases=["addCA","add_ass"])
