@@ -64,7 +64,7 @@ class Assessments(commands.Cog):
         del assessments[entry]
         self.update_assessments_file()
 
-    async def ca_cleanup(self):
+    async def ca_cleanup(self, ctx):
         nearest_ca_datetime = datetime.strptime(assessments[0][:14], "%d/%m/%y %H:%M")
         while len(assessments) > 0 and nearest_ca_datetime < datetime.now():
             await ctx.send(f"Automatically removed past assessment: {assessments[0]}")
@@ -78,7 +78,7 @@ class Assessments(commands.Cog):
     @commands.command(aliases=["CA", "assessments", "ass"])
     async def ca(self, ctx):
         if len(assessments) > 0:
-            await self.ca_cleanup()
+            await self.ca_cleanup(ctx)
         if len(assessments) > 0:
             formatted = self.desc_formatter()
             embed = discord.Embed(title="**Upcoming Assessment(s)**", color=0x78ff83, description="\n".join(formatted))
