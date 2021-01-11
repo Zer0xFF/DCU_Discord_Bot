@@ -84,7 +84,7 @@ class Assessments(commands.Cog):
             embed = discord.Embed(title="**Upcoming Assessment(s)**", color=0x78ff83, description="\n".join(formatted))
             await ctx.send(embed=embed)
         else:
-            embed = discord.Embed(title="**Upcoming Assessment(s)**", color=0x78ff83, description="You are free....for now >:)")
+            embed = discord.Embed(title="**Upcoming Assessment(s)**", color=0x78ff83, description="🎉 You are free....for now >:) 🎉")
             await ctx.send(embed=embed)
     
     @commands.command(aliases=["!stress_free"])
