@@ -132,7 +132,7 @@ class Assessments(commands.Cog):
     @commands.command(aliases=["cleanCA", "clean_ass"])
     async def cleanca(self, ctx):
         if len(assessments) > 0:
-            await self.ca_cleanup()
+            await self.ca_cleanup(ctx)
             await ctx.send("🍑 All clean 🍑")
         else:
             await ctx.send("Unable to cleanup, there are currently no active assessments.")
