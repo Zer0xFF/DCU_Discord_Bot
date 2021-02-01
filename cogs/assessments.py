@@ -80,7 +80,7 @@ class Assessments(commands.Cog):
             embed = discord.Embed(title="{}".format("**Upcoming Assessment(s)**"),color=0x78ff83, description="You are free....for now >:)")
             await ctx.send(embed=embed)
 
-    @commands.has_any_role("Overlord", "Mahmood", "Class Rep")
+    @commands.has_any_role("Overlord", "Mahmood", "Class Rep", "Jeff", "While Loop Master")
     @commands.command(aliases=["addCA","add_ass"])
     async def addca(self, ctx, date, time, module, *, description):
         #Adds entries
@@ -96,7 +96,7 @@ class Assessments(commands.Cog):
         else:
             await ctx.send("Invalid date or time, use DD/MM/YY and HH:MM (24 hour clock).")
 
-    @commands.has_any_role("Overlord", "Mahmood", "Class Rep")
+    @commands.has_any_role("Overlord", "Mahmood", "Class Rep", "Jeff")
     @commands.command(aliases=["RemoveCA", "removeCA", "rmca", "rmCA", "remove_ass"])
     async def removeca(self, ctx, entry: int):
         #removes entries - 0 is first entry in ca list.
@@ -125,7 +125,7 @@ class Assessments(commands.Cog):
         else:
             await ctx.send("Assessments already clear.")
 
-    @commands.has_any_role("Overlord", "Mahmood", "Class Rep")
+    @commands.has_any_role("Overlord", "Mahmood", "Class Rep", "Jeff")
     @commands.command(aliases=["cleanCA", "clean_ass"])
     async def cleanca(self, ctx):
         if len(assessments) > 0:
