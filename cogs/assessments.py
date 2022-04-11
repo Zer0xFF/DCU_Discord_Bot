@@ -14,7 +14,6 @@ class Assessments(commands.Cog):
     def __init__(self,bot):
         self.bot = bot
         self.load_assessments_file()
-        self.ca_cleanup_loop.start()
 
     def load_assessments_file(self):
         #Load file which contains all upcoming assessments
@@ -55,43 +54,52 @@ class Assessments(commands.Cog):
         #sorts asssessments by dates and times
         assessments.sort(key=lambda date: datetime.strptime(date[:14], "%d/%m/%y %H:%M"))
 
+    def _add_ca(self, string):
+        assessments.append(string)
+        self.date_sorter()
+        self.update_assessments_file()
+
     def remove_entry(self, entry):
         #removes entry at index entry
         del assessments[entry]
         self.update_assessments_file()
 
-    def ca_cleanup(self):
+    async def ca_cleanup(self, ctx):
         nearest_ca_datetime = datetime.strptime(assessments[0][:14], "%d/%m/%y %H:%M")
         while len(assessments) > 0 and nearest_ca_datetime < datetime.now():
+            await ctx.send(f"Automatically removed past assessment: {assessments[0]}")
             self.remove_entry(0)
             if len(assessments) > 0:
                 nearest_ca_datetime = datetime.strptime(assessments[0][:14], "%d/%m/%y %H:%M")
 
     def cog_unload(self):
-        self.ca_cleanup_loop.cancel()
+        pass
 
     @commands.command(aliases=["CA", "assessments", "ass"])
     async def ca(self, ctx):
         if len(assessments) > 0:
+            await self.ca_cleanup(ctx)
+        if len(assessments) > 0:
             formatted = self.desc_formatter()
-            embed = discord.Embed(title="{}".format("**Upcoming Assessment(s)**"),color=0x78ff83, description="\n".join(formatted))
+            embed = discord.Embed(title="**Upcoming Assessment(s)**", color=0x78ff83, description="\n".join(formatted))
             await ctx.send(embed=embed)
         else:
-            embed = discord.Embed(title="{}".format("**Upcoming Assessment(s)**"),color=0x78ff83, description="END OF ASSIGNMENTS FOREVER! CONGRATULATIONS EVERYONE! BEST OF LUCK IN LIFE :)")
+            embed = discord.Embed(title="**Upcoming Assessment(s)**", color=0x78ff83, description="🎉 END OF ASSIGNMENTS FOREVER! CONGRATULATIONS EVERYONE! BEST OF LUCK IN LIFE :) 🎉")
             await ctx.send(embed=embed)
+    
+    @commands.command(aliases=["!stress_free"])
+    async def stress_free(self, ctx):
+        await ctx.send("You have no assessments! (One can dream - Now get back to work!)")
 
     @commands.has_any_role("Overlord", "Mahmood", "Class Rep", "Jeff", "While Loop Master")
     @commands.command(aliases=["addCA","add_ass"])
     async def addca(self, ctx, date, time, module, *, description):
         #Adds entries
-        isValidDate = False
+        is_valid_date = False
         if (len(date.split("/")) == 3) and (len(time.split(":")) == 2):   #deals with date/time not being first 2 inputs.
-            isValidDate = self.date_validator(date + " " + time)
-
-        if isValidDate:
-            assessments.append(f"{date} {time} {module} {description.strip()}")
-            self.date_sorter()
-            self.update_assessments_file()
+            is_valid_date = self.date_validator(date + " " + time)
+        if is_valid_date:
+            self._add_ca(f"{date} {time} {module} {description.strip()}")
             await ctx.send("Add successful.")
         else:
             await ctx.send("Invalid date or time, use DD/MM/YY and HH:MM (24 hour clock).")
@@ -109,11 +117,6 @@ class Assessments(commands.Cog):
             else:
                 await ctx.send("Invalid entry, there are currently no active assignments.")
 
-    @tasks.loop(hours=24)
-    async def ca_cleanup_loop(self):
-        if len(assessments) > 0:
-            self.ca_cleanup()
-
     @commands.has_any_role("Overlord", "Mahmood", "Class Rep")
     @commands.command()
     async def clear_all_assessments(self, ctx):
@@ -129,8 +132,8 @@ class Assessments(commands.Cog):
     @commands.command(aliases=["cleanCA", "clean_ass"])
     async def cleanca(self, ctx):
         if len(assessments) > 0:
-            self.ca_cleanup()
-            await ctx.send("All clean.")
+            await self.ca_cleanup(ctx)
+            await ctx.send("🍑 All clean 🍑")
         else:
             await ctx.send("Unable to cleanup, there are currently no active assessments.")
 

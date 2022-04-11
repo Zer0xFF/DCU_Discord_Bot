@@ -178,7 +178,7 @@ class Timetable(commands.Cog):
         if message.content.startswith("!power"):
             await message.channel.send("No, try `!POWER`")
 
-    @commands.has_any_role("OVERLORDS", "Mahmood")
+    @commands.has_any_role("Overlord", "Mahmood")
     @commands.command()
     async def reload(self, ctx):
         """Reload the calender."""
@@ -237,7 +237,7 @@ class Timetable(commands.Cog):
         embed = self.GetDayArwSchedEmbed(day_arw)
         await ctx.send(embed=embed)
 
-    @commands.has_any_role("OVERLORDS", "Mahmood")
+    @commands.has_any_role("Overlord", "Mahmood")
     @commands.command(usage="<time> <date>")
     async def cancel(self, ctx, *, args):
         """Cancel a lecture."""
@@ -253,7 +253,7 @@ class Timetable(commands.Cog):
             await ctx.send("Invalid time date format, please use HH:mm DD-MM-YYYY")
 
 
-    @commands.has_any_role("OVERLORDS", "Mahmood")
+    @commands.has_any_role("Overlord", "Mahmood")
     @commands.command(usage="<time> <date>")
     async def uncancel(self, ctx, *, args):
         """Uncancel a lecture."""
